@@ -13,7 +13,7 @@ if __name__ == "__main__":
 		fp.close()
 	except FileNotFoundError:
 		pass
-	except JSONDecodeError:
+	except json.JSONDecodeError:
 		sys.stderr.write("JSON Decode Error\n")
 		fp.close()
 	parser = argparse.ArgumentParser()
