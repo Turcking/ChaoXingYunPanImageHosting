@@ -61,7 +61,7 @@ class ChaoXingYunPan:
 
 	def getFileInfo(self, path="/", cacheReuseSeconds=30):
 		"""
-		Return `path` info.
+		Return `path` info, or None if file not found.
 		Re-request if the cache time exceeded `cacheReuseSeconds`.
 		"""
 		import time
@@ -83,6 +83,8 @@ class ChaoXingYunPan:
 						j["list"] = self.fetchDirectoryInfo(j["id"])
 					targetFile = j
 					break
+			else:
+				return None
 		return targetFile
 
 	def fetchDirectoryInfo(self, fileId=0):
