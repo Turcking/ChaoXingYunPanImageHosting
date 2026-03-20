@@ -48,7 +48,7 @@ class ChaoXingYunPan:
 		response = self.session.get("https://i.chaoxing.com/")
 		response.close()
 		soup = bs4.BeautifulSoup(response.content.decode("utf-8"), "html.parser")
-		yunpanUrl = soup.select("a[name=\"云盘\"]")[0]["dataurl"]
+		yunpanUrl = soup.select("[name=\"云盘\"]")[0]["dataurl"]
 
 		response = self.session.get(yunpanUrl)
 		response.close()

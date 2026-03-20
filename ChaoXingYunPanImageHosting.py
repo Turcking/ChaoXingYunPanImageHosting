@@ -23,8 +23,8 @@ if __name__ == "__main__":
 	parser.add_argument("-P", "--port", help="Bind port, default 8080")
 	parser.add_argument("-U", "--user-agent", help="User Agent, default none")
 	args = vars(parser.parse_args())
-	if hasattr(args, "uname") and args.uname:
-		config["uname"] = args.uname
+	if "uname" in args and args["uname"]:
+		config["uname"] = args["uname"]
 	if "uname" not in config:
 		sys.stderr.write("uname is not set\n")
 		sys.exit(0)
@@ -45,8 +45,8 @@ if __name__ == "__main__":
 	if "port" not in config:
 		config["port"] = 8080
 
-	if "user-agent" in args and args["user-agent"]:
-		config["user-agent"] = args["user-agent"]
+	if "user_agent" in args and args["user_agent"]:
+		config["user-agent"] = args["user_agent"]
 	if "user-agent" not in config:
 		config["user-agent"] = ""
 
