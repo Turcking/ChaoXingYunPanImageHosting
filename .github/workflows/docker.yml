@@ -1,0 +1,36 @@
+on: push
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+    env:
+      REGISTRY: "ghcr.io"
+      IMAGE_NAME: "${{ github.repository }}"
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            core.exportVariable("IMAGE_NAME", process.env.IMAGE_NAME.replaceAll(new RegExp("([a-z0-9])([A-Z])", "g"), "$1-$2").toLowerCase());
+      - uses: docker/login-action@v3
+        with:
+          registry: "${{ env.REGISTRY }}"
+          username: "${{ github.actor }}"
+          password: "${{ secrets.GITHUB_TOKEN }}"
+      - uses: docker/build-push-action@v6
+        id: build-push-action
+        with:
+          push: true
+          tags: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          labels: "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}"
+          provenance: false
+          sbom: false
+        env:
+          DOCKER_BUILD_SUMMARY: false
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-push-action.outputs.digest }}"
+          subject-digest: "${{ steps.build-push-action.outputs.digest }}"
